@@ -13,7 +13,7 @@ const Results = (props) => {
     const { classes } = props
     return (
         <div className={classes.area}>
-            <h1>This is me</h1>
+            <h1>TODO Panel</h1>
         </div>
     )
 }

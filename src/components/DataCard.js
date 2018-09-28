@@ -12,6 +12,10 @@ const style = {
     card: {
         margin: 10,
     },
+    cardSelected: {
+        margin: 10,
+        border: 'red',
+    },
     media: {
         height: 140,
     },
@@ -20,7 +24,7 @@ const style = {
         flexWrap: 'wrap',
         justifyContent: 'center',
         align: 'center'
-    }
+    },
 }
 
 const DataCard = (props) => {
