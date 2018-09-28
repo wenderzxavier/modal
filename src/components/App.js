@@ -1,9 +1,9 @@
 import React from 'react';
+import Modal from '../views/Modal'
 import '../styles/index.css';
-import Division from './Division'
 
 const App = () => (
-  <Division />
+  <Modal />
 )
 
 export default App;
