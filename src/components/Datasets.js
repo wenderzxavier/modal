@@ -12,7 +12,8 @@ const style = {
     },
     title: {
         fontFamly: 'Raleway'
-    }
+    },
+    
 }
 
 const Datasets = (props) => {
