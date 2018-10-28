@@ -16,7 +16,7 @@ const styles = {
 
 const Navigation = (props) =>
     <div className={props.classes.root}>
-        <AppBar position="static" color="primary">
+        <AppBar position="static" color='primary'>
             <Toolbar>
                 <Typography variant="title" color="inherit" className={props.classes.grow}>
                     OpenModal
