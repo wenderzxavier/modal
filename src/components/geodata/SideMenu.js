@@ -1,29 +1,32 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
+import MenuData from '../../utils/MenuData'
 import '../../styles/geodata.css'
 
 class SideMenu extends Component {
-    openMenu() {
-
+    constructor(props){
+        super(props)
+        this.handleClick = this.handleClick.bind(this)
     }
 
-    componentDidMount() {
-        $('.menu-list li').click((target) => {
-
-        })
+    handleClick(evt, func){
+        $('.menu-list li').removeClass('menu-active')
+        $(evt.target).addClass('menu-active')
+        $('#menu-selected').css('width', '300px')
+        func(evt.target.id)
     }
 
     render() {
-        console.log($)
+        const updateMenu = this.props.updateMenu
         return (
             <div id='side-menu'>
-                <ul className='menu-list'>
-                    <li><i className="fas fa-cloud-upload-alt fa-lg"></i>Upload</li>
-                    <li><i className="fas fa-map-marked-alt fa-lg"></i>Map Type</li>
-                    <li><i className="fas fa-map-marker-alt fa-lg"></i>Marker</li>
-                    <li><i className="far fa-clock fa-lg"></i>Time Variation</li>
-                    <li><i className="fas fa-database"></i>Data Overview</li>
-                    <li><i className="fas fa-plus"></i>Add to Map</li>
+                <ul className='menu-list' onClick={(evt) => this.handleClick(evt, updateMenu)}>
+                    {MenuData.map((menuItem, key) => (
+                        <li key={key} id={menuItem.id}>
+                            {menuItem.icon}
+                            {menuItem.name}
+                        </li>
+                    ))}
                 </ul>
             </div>
         )

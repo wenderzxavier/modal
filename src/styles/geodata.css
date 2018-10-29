@@ -27,6 +27,7 @@
     height: 100%;
     text-align: center;
     background-color: rgb(247, 244, 244);
+    z-index: 10;
 }
 
 .menu-list{
@@ -58,9 +59,20 @@
 }
 
 #menu-selected{
-    width: 300px;
     height: 100%;
-    background-color: #dadada;
+    background-color: rgb(212, 212, 212);
+    transition: .5s;
+}
+
+.close-menu-btn{
+    float: right;
+    margin: 15px;
+    color: #20308b;
+    cursor: pointer;
+}
+
+.close-menu-btn i{
+    font-size: 28px;
 }
 
 #left-menu{
@@ -73,7 +85,8 @@
 }
 
 .menu-active{
-    background: linear-gradient(#20308b, #43519e);
+    background: linear-gradient(#20308b,  #5a639b) !important;
+    color: white;
 }
 
 .leaflet-container{
