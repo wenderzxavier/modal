@@ -1,6 +1,9 @@
+import L from 'leaflet'
+
 const markerColor = [
     {
         color: 'red',
+        icon: '',//L.icon({iconUrl: marker1, iconSize: [38, 95]}),
         code: 'rgba(255, 0, 0)'
     },
     {

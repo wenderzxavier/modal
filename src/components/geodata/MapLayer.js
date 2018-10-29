@@ -7,7 +7,7 @@ const { BaseLayer } = LayersControl
 const MapLayer = () => (
     <LayersControl position="topright">
         {mapTypes.map((data, key) => (
-            <BaseLayer checked key={key} name={data.name}>
+            <BaseLayer checked={data.checked} key={key} name={data.name}>
                 <TileLayer
                     attribution={data.attribution}
                     url={data.url}
