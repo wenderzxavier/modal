@@ -1,24 +1,26 @@
 import React from 'react'
-import MapType from '../components/geodata/menuItems/MapType'
+import Upload from '../components/geodata/menuItems/Upload'
+import Layers from '../components/geodata/menuItems/Layers'
+import Marker from '../components/geodata/menuItems/Marker'
 
 const MenuData = [
     {
         name: 'Upload',
         id: 'upload',
         icon: <i className="fas fa-cloud-upload-alt fa-lg"></i>,
-        data: <div>Upload</div>
+        data: <Upload />
     },
     {
-        name: 'Map Type',
-        id: 'mapType',
-        icon: <i className="fas fa-map-marked-alt fa-lg"></i>,
-        data: <MapType />
+        name: 'Layers',
+        id: 'layers',
+        icon: <i className="fas fa-layer-group fa-lg"></i>,
+        data: <Layers />
     },
     {
         name: 'Marker',
         id: 'marker',
         icon: <i className="fas fa-map-marker-alt fa-lg"></i>,
-        data: <div>Marker</div>
+        data: <Marker />
     },
     {
         name: 'Time Variation',

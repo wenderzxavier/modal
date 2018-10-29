@@ -1,9 +1,23 @@
-import React from 'react'
-import '../../../styles/MenuItems.css'
+import React from "react";
+import "../../../styles/MenuItems.css";
 
-const Upload = () => (
-    <div className='menu-content'>
-    </div>
+const previewData = (file) => (
+    console.log(file)
 )
 
-export default Upload
+const Upload = () => (
+    <div className="menu-content">
+        <form action="/">
+            <div className='input-area menu-content'>
+                <label htmlFor="input-data" className="input-item">
+                    <input id="input-data" className='input-btn' type="file" accept=".csv,.json" onChange={previewData(this)}/>
+                </label>
+            </div>
+            <div>
+                <input id='submit-data' type='submit' value='Submit' name='submit'></input>
+            </div>
+        </form>
+    </div>
+);
+
+export default Upload;

@@ -18,7 +18,6 @@ class GeoData extends Component {
     }
 
     render() {
-        console.log(`Current Menu = ${this.state.selectedMenu}`)
         return (
             <div id='geodata'>
                 <header>

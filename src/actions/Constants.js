@@ -1,0 +1,3 @@
+export const CHANGE_MAP = 'CHANGE_MAP'
+export const CHANGE_MARKER = 'CHANGE_MARKER'
+export const CHANGE_INTERVAL = 'CHANGE_INTERVAL'
