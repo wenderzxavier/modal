@@ -1,11 +1,11 @@
 import React from 'react'
-import markerColor from '../../../utils/MarkerColors'
+import MarkerData from '../../../utils/MarkerData'
 import '../../../styles/MenuItems.css'
 
 const Marker = () => (
     <div className='menu-content menu-wrap'>
-        {markerColor.map((color, key) => (
-            <div className='marker-color' key={key} style={{background: color.code}}></div>
+        {MarkerData.map((marker, key) => (
+            <div key={key}><img src={marker.icon} alt={`${marker.name} icon`}></img></div>
         ))}
     </div>
 )
