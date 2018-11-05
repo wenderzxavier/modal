@@ -55,6 +55,15 @@
     cursor: pointer;
 }
 
+.marker-label{
+    width: 20%;
+    max-width: 200px;
+    border: 3px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .input-item{
     background: white;
     padding: 10px 20px;
@@ -92,6 +101,20 @@
 }
 
 .marker-type{
-    width: 100px;
-    height: 100px;
+    width: 30%;
+    padding: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.marker-type svg{
+    fill: rgb(230, 226, 226);
+}
+
+.selectMarker{
+    border: 2px solid white;
+}
+
+#markerColor{
+    margin-top: 80px;
 }
