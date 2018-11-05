@@ -5,7 +5,7 @@ import '../../../styles/MenuItems.css'
 const Marker = () => (
     <div className='menu-content menu-wrap'>
         {MarkerData.map((marker, key) => (
-            <div key={key}><img src={marker.icon} alt={`${marker.name} icon`}></img></div>
+            <div><label key={key} className='marker-type'>{marker.icon}<p>{marker.name}</p></label></div>
         ))}
     </div>
 )

@@ -1,11 +1,4 @@
-import { CHANGE_MAP, CHANGE_MARKER, CHANGE_INTERVAL, CHANGE_COLOR } from './Constants'
-
-export const changeMap = (map) => {
-    return{
-        type : CHANGE_MAP,
-        map
-    }
-}
+import { CHANGE_MARKER, CHANGE_INTERVAL, CHANGE_COLOR } from './Constants'
 
 export const changeMarker = (marker) => {
     return {

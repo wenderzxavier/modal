@@ -90,3 +90,8 @@
 .input-btn{
     display: none;
 }
+
+.marker-type{
+    width: 100px;
+    height: 100px;
+}

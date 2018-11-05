@@ -1,18 +1,18 @@
-import { CHANGE_MAP, CHANGE_MARKER, CHANGE_INTERVAL } from '../actions/Constants'
+import { CHANGE_COLOR, CHANGE_MARKER, CHANGE_INTERVAL } from '../actions/Constants'
 
 const initialMapState = {
-    map: 'standard',
+    color: 'rgb(255,0,0)',
     marker: 'blue',
     interval: 'none'
 }
 
 const reducer = (state = initialMapState, action) => {
-    const { map, marker, interval } = action
+    const { color, marker, interval } = action
     switch (action.type) {
-        case CHANGE_MAP:
+        case CHANGE_COLOR:
             return {
                 ...state,
-                map: map
+                color: color
             }
         case CHANGE_MARKER:
             return {
