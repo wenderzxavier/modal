@@ -12,7 +12,7 @@ class SideMenu extends Component {
     handleClick(evt, func){
         $('.menu-list li').removeClass('menu-active')
         $(evt.currentTarget).addClass('menu-active')
-        $('#menu-selected').css('width', '300px')
+        evt.currentTarget.id === 'dataOverview' ? $('#menu-selected').css('width', '1500px') : $('#menu-selected').css('width', '300px')
         func(evt.currentTarget.id)
     }
 

@@ -125,7 +125,6 @@
     cursor: pointer;
     color: #20308b;
     transition: .2s;
-    margin-bottom: 30px;
 }
 
 .update-btn:hover{

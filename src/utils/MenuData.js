@@ -2,6 +2,10 @@ import React from 'react'
 import Upload from '../components/geodata/menuItems/Upload'
 import Layers from '../components/geodata/menuItems/Layers'
 import Marker from '../components/geodata/menuItems/Marker'
+import DataOverview from '../components/geodata/menuItems/DataOverview'
+import TimeVariation from '../components/geodata/menuItems/TimeVariation'
+import AddMap from '../components/geodata/menuItems/AddMap'
+import BeforeAfter from '../components/geodata/menuItems/BeforeAfter'
 
 const MenuData = [
     {
@@ -9,6 +13,12 @@ const MenuData = [
         id: 'upload',
         icon: <i className="fas fa-cloud-upload-alt fa-lg"></i>,
         data: <Upload />
+    },
+    {
+        name: 'Before-After',
+        id: 'beforeAfter',
+        icon: <i className="fas fa-map-marked-alt fa-lg"></i>,
+        data: <BeforeAfter />
     },
     {
         name: 'Layers',
@@ -26,19 +36,19 @@ const MenuData = [
         name: 'Time Variation',
         id: 'timeVariation',
         icon: <i className="far fa-clock fa-lg"></i>,
-        data: <div>Time</div>
+        data: <TimeVariation />
     },
     {
         name: 'Data Overview',
         id: 'dataOverview',
-        icon: <i className="fas fa-database"></i>,
-        data: <div>Data Overview</div>
+        icon: <i className="fas fa-database fa-lg"></i>,
+        data: <DataOverview />
     },
     {
         name: 'Add to Map',
         id: 'addMap',
-        icon: <i className="fas fa-plus"></i>,
-        data: ''
+        icon: <i className="fas fa-plus fa-lg"></i>,
+        data: <AddMap />
     }
 ]
 

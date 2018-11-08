@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import $ from 'jquery'
 import "../../../styles/MenuItems.css";
 
+const uuidv1 = require('uuid/v1');
+
 class Upload extends Component {
     state = {
         fileName: '',
@@ -17,7 +19,6 @@ class Upload extends Component {
             let csv = evt.target.result
             const allTextLines = csv.split(/\r\n|\n/)
             const DBOpenRequest = window.indexedDB.open("openModal", 1);
-
             DBOpenRequest.onsuccess = (evt) => {
                 const db = DBOpenRequest.result
                 var transaction = db.transaction(["openModal"], "readwrite");
@@ -25,15 +26,17 @@ class Upload extends Component {
                 var timezone = new Date().getTimezoneOffset() / -60
                 for (let i = 1; i < allTextLines.length; i++) {
                     let data = allTextLines[i].split(';')
-                    let coordinates = data[1].split(',')
-                    let unixTime = new Date((new Date(data[2]).getTime()) + (timezone * 60 * 60 * 1000)).getTime() / 1000
-                    objectStore.add({
-                        id: data[0],
-                        coordinates: coordinates,
-                        timestamp: unixTime,
-                        load: parseInt(data[3], 10),
-                        group: parseInt(data[4], 10)
-                    });
+                    if ( Object.keys(data).length === 5 ) {
+                        let coordinates = data[1].split(',')
+                        let unixTime = new Date((new Date(data[2]).getTime()) + (timezone * 60 * 60 * 1000)).getTime() / 1000
+                        objectStore.add({
+                            id: uuidv1(),
+                            coordinates: coordinates,
+                            timestamp: unixTime,
+                            load: parseInt(data[3], 10),
+                            group: parseInt(data[4], 10)
+                        });
+                    }
                 }
                 console.log('Completed')
             }

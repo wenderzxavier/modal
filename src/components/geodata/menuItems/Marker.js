@@ -64,7 +64,7 @@ class Marker extends Component {
       <div>
         <div className="menu-content">
           <input type='button' className='update-btn btn-hover' value='Update Markers' onClick={() => this.updateMarker()}></input>
-          <p className='updateMarker-feedback'></p>
+          <p>You can toggle groups on the Layer Control at the top-right of the map</p>
         </div>
         {[0, 1, 2, 3].map((group, key) => (
           <div className='marker-group' key={key}>

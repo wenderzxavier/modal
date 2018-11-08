@@ -6,9 +6,9 @@ import '../../styles/geodata.css'
 
 class MapComponent extends Component {
     render() {
-        const position = [0,0]
+        const position = [-19.905030, -43.913277]
         const map = (
-            <Map center={position} zoom={3}>
+            <Map center={position} zoom={18}>
                 <MapLayer />
             </Map>
         )

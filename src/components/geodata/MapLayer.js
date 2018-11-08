@@ -1,24 +1,66 @@
 import React, { Component } from 'react'
-// import L, { svg } from 'leaflet'
+import ReactDOMServer from 'react-dom/server'
+import L from 'leaflet'
 import { connect } from 'react-redux'
 import { Marker, LayersControl, LayerGroup, TileLayer } from 'react-leaflet'
 import mapTypes from '../../utils/MapLayerData'
-// import MarkerIcon from '../../img/geodata/MarkerIcon'
-// import icontest from '../../img/geodata/antennaIcon.svg'
+import AntennaIcon from '../../img/geodata/AntennaIcon'
+import MarkerIcon from '../../img/geodata/MarkerIcon';
+import '../../styles/Map.css'
+import BusIcon from '../../img/geodata/BusIcon';
+import CarIcon from '../../img/geodata/CarIcon';
+import PersonIcon from '../../img/geodata/PersonIcon';
+import PinIcon from '../../img/geodata/PinIcon';
 
 class MapLayer extends Component {
+    getMarkerType(type, group) {
+        let fillColor = this.getMarkerColor(group)
+        switch (type) {
+            case 'marker':
+                return <MarkerIcon fill={fillColor} />
+
+            case 'antenna':
+                return <AntennaIcon fill={fillColor} />
+
+            case 'bus':
+                return <BusIcon fill={fillColor} />
+
+            case 'car':
+                return <CarIcon fill={fillColor} />
+
+            case 'person':
+                return <PersonIcon fill={fillColor} />
+
+            case 'pin':
+                return <PinIcon fill={fillColor} />
+
+            default:
+                return <MarkerIcon fill={fillColor} />
+        }
+    }
+
+    getMarkerColor(group) {
+        return this.props.markerColor[group]
+    }
+
+    updateIcon() {
+        let result = []
+        const { markerType } = this.props
+        for (let i = 0; i < 4; i++) {
+            result.push(
+                L.divIcon({
+                    html: ReactDOMServer.renderToString(this.getMarkerType(markerType[i], i)),
+                    iconSize: [33, 33],
+                    className: 'markerStyle'
+                }))
+        }
+        return result
+    }
+
     render() {
         const { BaseLayer, Overlay } = LayersControl
         const { data } = this.props
-        //const svgMarker = MarkerData.filter(marker => marker.id === markerType)[0].icon
-        // var markerIcon = L.icon({
-        //     iconUrl: {...MarkerIcon},
-        
-        //     iconSize:     [38, 95], // size of the icon
-        //     iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-        //     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-        // });
-        
+        let icons = this.updateIcon()
         return (
             <LayersControl position="topright">
                 {mapTypes.map((data, key) => (
@@ -29,30 +71,18 @@ class MapLayer extends Component {
                         />
                     </BaseLayer>
                 ))}
-                {[1, 2, 3, 4].map((value) => (
+                {[0, 1, 2, 3].map((value) => (
                     <Overlay key={value} name={`Group #${value}`}>
                         <LayerGroup>
                             {data
                                 .filter(register => register.group === value)
                                 .map((register, key) => (
-                                    <Marker key={key} position={register.coordinates}>
+                                    <Marker key={key} position={register.coordinates} icon={icons[value]}>
                                     </Marker>
                                 ))
                             }
                         </LayerGroup>
                     </Overlay>
-                    // <Overlay key={value} name={`Group #${value}`}>
-                    //     {data
-                    //         .filter(register => register.group === value)
-                    //         .map((register, key) => (
-                    //             <Marker key={key} position={register.coordinates}>
-                    //                 <Popup>
-                    //         <p>{`${register.name}\n${register.coordinates}${register.load}`}</p>
-                    //                 </Popup>
-                    //             </Marker>
-                    //         ))
-                    //     }
-                    // </Overlay>
                 ))}
             </LayersControl>
         )

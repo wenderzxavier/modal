@@ -5,11 +5,11 @@ const initialMapState = {
     marker: { 0: 'marker', 1: 'marker', 2: 'marker', 3: 'marker' },
     interval: 'none',
     data: [
-        { id: "M10", coordinates: [0, 0], timestamp: 1514930400, load: 2, group: 1 },
-        { id: "M10", coordinates: [-2, -2], timestamp: 1514930400, load: 2, group: 1 },
-        { id: "M19", coordinates: [-1, -1], timestamp: 1514930400, load: 2, group: 1 },
-        { id: "M10", coordinates: [1, 1], timestamp: 1514930400, load: 2, group: 2 },
-        { id: "M10", coordinates: [2, 2], timestamp: 1514930400, load: 2, group: 3 }]
+        { id: "M10", coordinates: [-19.905030, -43.913277], timestamp: 1514930400, load: 2, group: 0 },
+        { id: "M10", coordinates: [-2, -2], timestamp: 1514930400, load: 2, group: 0 },
+        { id: "M19", coordinates: [-1, -1], timestamp: 1514930400, load: 2, group: 0 },
+        { id: "M10", coordinates: [1, 1], timestamp: 1514930400, load: 2, group: 1 },
+        { id: "M10", coordinates: [2, 2], timestamp: 1514930400, load: 2, group: 2 }]
 }
 
 const reducer = (state = initialMapState, action) => {
