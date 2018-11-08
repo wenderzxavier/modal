@@ -1,3 +1,4 @@
 export const CHANGE_MARKER = 'CHANGE_MARKER'
 export const CHANGE_INTERVAL = 'CHANGE_INTERVAL'
 export const CHANGE_COLOR = 'CHANGE_COLOR'
+export const CHANGE_DATA = 'CHANGE_DATA'

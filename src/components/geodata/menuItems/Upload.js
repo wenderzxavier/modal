@@ -5,28 +5,41 @@ import "../../../styles/MenuItems.css";
 class Upload extends Component {
     state = {
         fileName: '',
-        fileSize: ''
-    }
-
-    deleteDB(dbName){
-        window.indexedDB.deleteDatabase('openModal')
+        fileSize: '',
     }
 
     populateDB(evt) {
         evt.preventDefault()
-        const indexedDB = window.indexedDB ||    // Use the standard DB API
-            window.mozIndexedDB ||             // Or Firefox's early version of it
-            window.webkitIndexedDB;            // Or Chrome's early version   
-        const IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
-        const IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange;
-        const dbVersion = 1
-        this.deleteDB('openModal')
-        const req = indexedDB.open('openModal', dbVersion, {storage: 'temporary'})
-        req.onerror = () => console.log('Database failed to open')
-        req.onsuccess = () => console.log('Database opened successfully');
-        let db = req.result
-    }
+        $('#progress').text('Populating data....\nWait a moment.')
+        const reader = new FileReader()
+        reader.readAsText($('#input-data')[0].files[0])
+        reader.onload = (evt) => {
+            let csv = evt.target.result
+            const allTextLines = csv.split(/\r\n|\n/)
+            const DBOpenRequest = window.indexedDB.open("openModal", 1);
 
+            DBOpenRequest.onsuccess = (evt) => {
+                const db = DBOpenRequest.result
+                var transaction = db.transaction(["openModal"], "readwrite");
+                var objectStore = transaction.objectStore("openModal");
+                var timezone = new Date().getTimezoneOffset() / -60
+                for (let i = 1; i < allTextLines.length; i++) {
+                    let data = allTextLines[i].split(';')
+                    let coordinates = data[1].split(',')
+                    let unixTime = new Date((new Date(data[2]).getTime()) + (timezone * 60 * 60 * 1000)).getTime() / 1000
+                    objectStore.add({
+                        id: data[0],
+                        coordinates: coordinates,
+                        timestamp: unixTime,
+                        load: parseInt(data[3], 10),
+                        group: parseInt(data[4], 10)
+                    });
+                }
+                console.log('Completed')
+            }
+            $('#progress').text('Done. You can start using GeoModal')
+        }
+    }
 
     previewData() {
         let file = $('#input-data')[0].files[0]
@@ -34,7 +47,25 @@ class Upload extends Component {
             fileName: file.name,
             fileSize: file.size
         })
+        const indexedDB = window.indexedDB ||    // Use the standard DB API
+            window.mozIndexedDB ||             // Or Firefox's early version of it
+            window.webkitIndexedDB;            // Or Chrome's early version   
+        const dbVersion = 1
+        const req = indexedDB.open('openModal', dbVersion, { storage: 'temporary' })
+        req.onerror = () => console.log('Database failed to open')
+        req.onsuccess = () => console.log('Database opened successfully');
+        req.onupgradeneeded = function (evt) {
+            var db = evt.target.result;
 
+            // Create an objectStore for this database
+            var objectStore = db.createObjectStore("openModal", { keyPath: "id" });
+
+            // define what data items the objectStore will contain
+            objectStore.createIndex("coordinates", "coordinates", { unique: false });
+            objectStore.createIndex("timestamp", "timestamp", { unique: false });
+            objectStore.createIndex("load", "load", { unique: false });
+            objectStore.createIndex("group", "group", { unique: false });
+        };
     }
 
     render() {
@@ -46,24 +77,25 @@ class Upload extends Component {
             <div className="menu-content">
                 {indexedDB ? (
                     <form action="/">
-                    <div className='input-area menu-content'>
-                        <label htmlFor="input-data" className="input-item">
-                            <i className="fas fa-file-upload fa-lg"></i>Upload File
+                        <div className='input-area menu-content'>
+                            <label htmlFor="input-data" className="input-item">
+                                <i className="fas fa-file-upload fa-lg"></i>Upload File
                         <input id="input-data" className='input-btn' type="file" accept=".csv,.json" onChange={() => this.previewData()} />
-                        </label>
-                    </div>
-                    {fileName === '' ? '' :
-                        <div>
-                            <div>
-                                <p>File: {fileName}</p>
-                                <p>Size: {fileSize / 1000}KB</p>
-                            </div>
-                            <div id='submitBtn'>
-                                <input id='submit-data' type='submit' value='Submit' name='submit' onClick={(evt) => this.populateDB(evt)}></input>
-                            </div>
+                            </label>
                         </div>
-                    }
-                </form>
+                        {fileName === '' ? '' :
+                            <div>
+                                <div>
+                                    <p>File: {fileName}</p>
+                                    <p>Size: {fileSize / 1000}KB</p>
+                                </div>
+                                <div id='submitBtn'>
+                                    <input id='submit-data' type='submit' value='Submit' name='submit' onClick={(evt) => this.populateDB(evt)}></input>
+                                </div>
+                                <p id='progress'></p>
+                            </div>
+                        }
+                    </form>
                 ) : <p>Your browser does not support indexedDB. Please, try again using another browser.</p>}
             </div>
         )

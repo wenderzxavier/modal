@@ -17,6 +17,10 @@ class GeoData extends Component {
         })
     }
 
+    componentDidMount(){
+        window.indexedDB.deleteDatabase('openModal') // Delete IndexedDB
+    }
+
     render() {
         return (
             <div id='geodata'>
