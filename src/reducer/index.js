@@ -9,7 +9,7 @@ const initialMapState = {
         { id: "M10", coordinates: [-2, -2], timestamp: 1514930400, load: 2, group: 0 },
         { id: "M19", coordinates: [-1, -1], timestamp: 1514930400, load: 2, group: 0 },
         { id: "M10", coordinates: [1, 1], timestamp: 1514930400, load: 2, group: 1 },
-        { id: "M10", coordinates: [2, 2], timestamp: 1514930400, load: 2, group: 2 }
+        { id: "M10", coordinates: [2, 2], timestamp: 1514930400, load: 2, group: 2 }        
     ],
 }
 

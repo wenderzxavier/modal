@@ -72,15 +72,15 @@ class MapLayer extends Component {
                     </BaseLayer>
                 ))}
                 {[0, 1, 2, 3].map((value) => (
-                    <Overlay key={value} name={`Group #${value}`}>
+                    <Overlay key={value} name={`Group #${value}`} checked>
                         <LayerGroup>
-                            {data
-                                .filter(register => register.group === value)
-                                .map((register, key) => (
-                                    <Marker key={key} position={register.coordinates} icon={icons[value]}>
-                                    </Marker>
-                                ))
-                            }
+                                {data
+                                    .filter(register => register.group === value)
+                                    .map((register, key) => (
+                                        <Marker key={key} position={register.coordinates} icon={icons[value]}>
+                                        </Marker>
+                                    ))
+                                }
                         </LayerGroup>
                     </Overlay>
                 ))}

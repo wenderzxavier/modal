@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import $ from 'jquery'
+import { connect } from 'react-redux'
 import "../../../styles/MenuItems.css";
+import { changeData } from "../../../actions";
 
 const uuidv1 = require('uuid/v1');
 
@@ -8,6 +10,7 @@ class Upload extends Component {
     state = {
         fileName: '',
         fileSize: '',
+        data: []
     }
 
     populateDB(evt) {
@@ -37,11 +40,22 @@ class Upload extends Component {
                             load: parseInt(data[3], 10),
                             group: parseInt(data[4], 10)
                         });
-                    }
+                    }   
                 }
                 console.log('Completed')
+                var request = objectStore.getAll()
+                request.onsuccess = (evt) => (
+                    this.setState({
+                        data: evt.target.result
+                    }, () => {
+                        this.props.dataToMap(this.state.data)
+                        $('#progress').text('Done. You can start using GeoModal')
+                        $('.data-upload').css('display', 'none')
+                        $('.data-upload-beforeafter').css('display', 'none')
+                        $('.data-analyses').css('display', 'flex')                                
+                    })
+                )
             }
-            $('#progress').text('Done. You can start using GeoModal')
         }
     }
 
@@ -107,4 +121,10 @@ class Upload extends Component {
     }
 }
 
-export default Upload;
+const mapStateToProps = state => ({})
+
+const mapDispatchToProps = dispatch => ({
+    dataToMap: (data) => dispatch(changeData(data))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Upload)

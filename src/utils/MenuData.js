@@ -12,43 +12,50 @@ const MenuData = [
         name: 'Upload',
         id: 'upload',
         icon: <i className="fas fa-cloud-upload-alt fa-lg"></i>,
-        data: <Upload />
+        data: <Upload />,
+        class: 'menu-item data-upload'
     },
     {
         name: 'Before-After',
         id: 'beforeAfter',
         icon: <i className="fas fa-map-marked-alt fa-lg"></i>,
-        data: <BeforeAfter />
+        data: <BeforeAfter />,
+        class: 'menu-item data-upload-beforeafter'
     },
     {
         name: 'Layers',
         id: 'layers',
         icon: <i className="fas fa-layer-group fa-lg"></i>,
-        data: <Layers />
+        data: <Layers />,
+        class: 'menu-item data-analyses'
     },
     {
         name: 'Marker',
         id: 'marker',
         icon: <i className="fas fa-map-marker-alt fa-lg"></i>,
-        data: <Marker />
+        data: <Marker />,
+        class: 'menu-item data-analyses'
     },
     {
         name: 'Time Variation',
         id: 'timeVariation',
         icon: <i className="far fa-clock fa-lg"></i>,
-        data: <TimeVariation />
+        data: <TimeVariation />,
+        class: 'menu-item data-analyses'
     },
     {
         name: 'Data Overview',
         id: 'dataOverview',
         icon: <i className="fas fa-database fa-lg"></i>,
-        data: <DataOverview />
+        data: <DataOverview />,
+        class: 'menu-item data-analyses'
     },
     {
         name: 'Add to Map',
         id: 'addMap',
         icon: <i className="fas fa-plus fa-lg"></i>,
-        data: <AddMap />
+        data: <AddMap />,
+        class: 'menu-item data-analyses'
     }
 ]
 

@@ -30,22 +30,6 @@
     color: #20308b;
 }
 
-.menu-list li{
-    list-style: none;
-    height: 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(#d4d4d4, rgb(247, 244, 244), rgb(247, 244, 244));
-    cursor: pointer;
-}
-
-.menu-list li:hover{
-    background: linear-gradient(#20308b,  #5a639b);
-    color: white;
-}
-
 .menu-list li i{
     display: block;
     width: 80px;
@@ -86,4 +70,24 @@
 
 .leaflet-container{
     height: 100%;
+}
+
+.menu-item{
+    list-style: none;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(#d4d4d4, rgb(247, 244, 244), rgb(247, 244, 244));
+    cursor: pointer;
+}
+
+.menu-item:hover{
+    background: linear-gradient(#20308b,  #5a639b);
+    color: white;
+}
+
+.data-analyses{
+    display: none;
 }

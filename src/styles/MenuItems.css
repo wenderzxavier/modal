@@ -188,3 +188,18 @@
 .plot-data{
     margin: 20px 0;
 }
+
+.btn-primary{
+    background-color: #007bff;
+    border: #007bff;
+    color: white;
+    border-radius: .2rem;
+    cursor: pointer;
+}
+
+.btn-default{
+    border-radius: .2rem;
+    cursor: pointer;
+    background-color: #b9bcbe;
+    border: #b9bcbe;
+}

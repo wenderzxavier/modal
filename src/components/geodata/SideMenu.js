@@ -22,7 +22,7 @@ class SideMenu extends Component {
             <div id='side-menu'>
                 <ul className='menu-list'>
                     {MenuData.map((menuItem, key) => (
-                        <li key={key} id={menuItem.id} onClick={(evt) => this.handleClick(evt, updateMenu)}>
+                        <li key={key} id={menuItem.id} onClick={(evt) => this.handleClick(evt, updateMenu)} className={menuItem.class}>
                             {menuItem.icon}
                             {menuItem.name}
                         </li>
