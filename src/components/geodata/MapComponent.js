@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { Map } from 'react-leaflet'
 // import MarkerColor from '../../utils/MarkerColors'
 import MapLayer from './MapLayer'
-import '../../styles/geodata.css'
+import '../../styles/Map.css'
 
 class MapComponent extends Component {
     render() {
-        const position = [-19.905030, -43.913277]
-        const map = (
-            <Map center={position} zoom={18}>
+        const position = [0, 0]
+        var map = (
+            <Map center={position} zoom={3}>
                 <MapLayer />
             </Map>
         )
@@ -19,5 +19,6 @@ class MapComponent extends Component {
         )
     }
 }
+
 
 export default MapComponent

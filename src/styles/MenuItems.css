@@ -179,7 +179,12 @@
 
 .markertype-group label{
     height: auto;
+    min-width: 33px;
     width: 13%;
-    padding: 2px;
     cursor: pointer;
+    text-align: center;
+}
+
+.plot-data{
+    margin: 20px 0;
 }

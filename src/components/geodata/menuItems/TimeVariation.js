@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { changeData } from '../../../actions';
+import { connect } from 'react-redux'
 import '../../../styles/MenuItems.css'
 
 class TimeVariation extends Component {
@@ -44,4 +46,8 @@ class TimeVariation extends Component {
     }
 }
 
-export default TimeVariation
+const mapDispatchToProps = dispatch => ({
+    updateData: (data) => dispatch(changeData(data))
+})
+
+export default connect(mapDispatchToProps)(TimeVariation)

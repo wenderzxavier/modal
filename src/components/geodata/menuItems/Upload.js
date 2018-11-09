@@ -31,6 +31,7 @@ class Upload extends Component {
                         let unixTime = new Date((new Date(data[2]).getTime()) + (timezone * 60 * 60 * 1000)).getTime() / 1000
                         objectStore.add({
                             id: uuidv1(),
+                            name: data[0],
                             coordinates: coordinates,
                             timestamp: unixTime,
                             load: parseInt(data[3], 10),
@@ -64,6 +65,7 @@ class Upload extends Component {
             var objectStore = db.createObjectStore("openModal", { keyPath: "id" });
 
             // define what data items the objectStore will contain
+            objectStore.createIndex("name", "name", { unique: false });
             objectStore.createIndex("coordinates", "coordinates", { unique: false });
             objectStore.createIndex("timestamp", "timestamp", { unique: false });
             objectStore.createIndex("load", "load", { unique: false });

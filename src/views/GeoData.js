@@ -3,6 +3,7 @@ import Navigation from '../components/Navigation'
 import SideMenu from '../components/geodata/SideMenu'
 import MenuDetails from '../components/geodata/MenuDetails'
 import MapComponent from '../components/geodata/MapComponent'
+import DualMap from '../components/geodata/DualMap'
 import '../styles/geodata.css'
 
 
@@ -11,13 +12,13 @@ class GeoData extends Component {
         selectedMenu: ''
     }
 
-    updateSelectMenu(menu = ''){
+    updateSelectMenu(menu = '') {
         this.setState({
             selectedMenu: menu
         })
     }
 
-    componentDidMount(){
+    componentDidMount() {
         window.indexedDB.deleteDatabase('openModal') // Delete IndexedDB
     }
 
@@ -28,9 +29,13 @@ class GeoData extends Component {
                     <Navigation />
                 </header>
                 <main id='main'>
-                    <SideMenu updateMenu={this.updateSelectMenu.bind(this)}/>
-                    <MenuDetails selectedMenu={this.state.selectedMenu}/>
-                    <MapComponent />
+                    <SideMenu updateMenu={this.updateSelectMenu.bind(this)} />
+                    <MenuDetails selectedMenu={this.state.selectedMenu} />
+                    {this.state.selectedMenu === 'beforeAfter' ?
+                        <DualMap />
+                        :
+                        <MapComponent />
+                    }
                 </main>
             </div>
         )

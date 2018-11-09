@@ -9,7 +9,8 @@ const initialMapState = {
         { id: "M10", coordinates: [-2, -2], timestamp: 1514930400, load: 2, group: 0 },
         { id: "M19", coordinates: [-1, -1], timestamp: 1514930400, load: 2, group: 0 },
         { id: "M10", coordinates: [1, 1], timestamp: 1514930400, load: 2, group: 1 },
-        { id: "M10", coordinates: [2, 2], timestamp: 1514930400, load: 2, group: 2 }]
+        { id: "M10", coordinates: [2, 2], timestamp: 1514930400, load: 2, group: 2 }
+    ],
 }
 
 const reducer = (state = initialMapState, action) => {
@@ -32,12 +33,12 @@ const reducer = (state = initialMapState, action) => {
         case CHANGE_INTERVAL:
             return {
                 ...state,
-                interval: interval
+                interval
             }
         case CHANGE_DATA:
             return {
                 ...state,
-                data: data
+                data
             }
         default:
             return state
