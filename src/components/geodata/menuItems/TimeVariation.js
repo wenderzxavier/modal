@@ -1,25 +1,50 @@
 import React, { Component } from 'react'
 import { changeData } from '../../../actions';
 import { connect } from 'react-redux'
-import $ from 'jquery'
+// import $ from 'jquery'
 import DateRangePicker from 'react-bootstrap-daterangepicker'
 //import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import '../../../styles/MenuItems.css'
 
 class TimeVariation extends Component {
+    constructor(props){
+        super(props)
+        this.editInterval = this.editInterval.bind(this)
+    }
+
     state = {
         db: undefined,
         data: [],
-        interval: ''
+        interval: 'none',
+        startDate: '',
+        endDate: '',
+        startDateUnix: 0,
+        endDateUnix: 0
     }
 
-    editInterval(evt) {
+    updateStateInterval(startDate,endDate){
+        this.setState({
+            startDate,
+            endDate
+        })
+    }
+
+    editInterval(evt, picker) {
+        let start = new Date(picker.startDate._d)
+        let end = new Date(picker.endDate._d)
+        let startDate = `${start.getMonth() + 1}/${start.getDate()}/${start.getFullYear()}`
+        let endDate = `${end.getMonth() + 1}/${end.getDate()}/${end.getFullYear()}`
+        this.setState({
+            startDate,
+            endDate,
+            startDateUnix: Math.round((new Date(start)).getTime() / 1000),
+            endDateUnix: Math.round((new Date(end)).getTime() / 1000)
+        })
     }
 
     resetData() {
         const { db } = this.state
-        console.log(this.state)
         var transaction = db.transaction(["openModal"], "readwrite");
         var objectStore = transaction.objectStore("openModal");
         var request = objectStore.getAll()
@@ -32,30 +57,53 @@ class TimeVariation extends Component {
 
     componentDidMount() {
         let request = indexedDB.open('openModal')
+        const startDate = new Date(this.props.startDate * 1000)
+        const endDate = new Date(this.props.endDate * 1000)
+        const formatedStartDate = `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getFullYear()}`
+        const formatedEndDate = `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getFullYear()}`
         request.onsuccess = (evt) => {
             this.setState({
-                db: evt.target.result
+                db: evt.target.result,
+                startDate: formatedStartDate,
+                endDate: formatedEndDate
             })
         }
+
     }
 
     render() {
+        const startDate = new Date(this.props.startDate * 1000)
+        const endDate = new Date(this.props.endDate * 1000)
+        const formatedStartDate = `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getFullYear()}`
+        const formatedEndDate = `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getFullYear()}`
         return (
             <div className='menu-content'>
-                <input type='button' value='Update Map Data'></input>
-                <label htmlFor='reset-data'><i className="fas fa-undo"></i><input id='reset-data' type='button' value='Reset Data' onClick={() => this.resetData()}></input></label>
-                <label>
-                    <DateRangePicker startDate="1/1/2014" endDate="3/1/2014">
-                    <p>This is my Calendar</p>
-                    </DateRangePicker>
+                <label htmlFor='update-mapdata' className='timeVar-btn'><input type='button' id='update-mapdata'></input>Update Map Data</label>
+                <label htmlFor='reset-data' className='reset-btn'>
+                    <i className="fas fa-undo"></i>
+                    <input id='reset-data' type='button' onClick={() => this.resetData()}></input> Reset Data
                 </label>
+                <p>Select Date-Range to Analyze:</p>
+                <DateRangePicker minDate={formatedStartDate} maxDate={formatedEndDate} startDate={formatedStartDate} endDate={formatedEndDate} onApply={this.editInterval}>
+                    <label className='date-picker'>
+                        <i className="far fa-calendar-alt calendar date-picker-icon"></i>
+                    </label>
+                </DateRangePicker>
+                <p className='interval-display'>Start Date: {this.state.startDate}</p>
+                <p className='interval-display'>End Date: {this.state.endDate}</p>
+                <div>
+                    <header>Intervals</header>
+                    <label><input type='button'></input> Static</label>
+                </div>
             </div>
         )
     }
 }
 
 const mapStateToProps = state => ({
-    data: state.data
+    data: state.data,
+    startDate: state.start,
+    endDate: state.end
 })
 
 const mapDispatchToProps = dispatch => ({

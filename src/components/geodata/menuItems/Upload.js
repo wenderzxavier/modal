@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import $ from 'jquery'
 import { connect } from 'react-redux'
 import "../../../styles/MenuItems.css";
-import { changeData } from "../../../actions";
+import { changeData, changeDates } from "../../../actions";
 
 const uuidv1 = require('uuid/v1');
 
@@ -27,11 +27,15 @@ class Upload extends Component {
                 var transaction = db.transaction(["openModal"], "readwrite");
                 var objectStore = transaction.objectStore("openModal");
                 var timezone = new Date().getTimezoneOffset() / -60
+                var minDate = Math.round(new Date().getTime() / 1000)
+                var maxDate = 0
                 for (let i = 1; i < allTextLines.length; i++) {
                     let data = allTextLines[i].split(';')
                     if ( Object.keys(data).length === 5 ) {
                         let coordinates = data[1].split(',')
                         let unixTime = new Date((new Date(data[2]).getTime()) + (timezone * 60 * 60 * 1000)).getTime() / 1000
+                        if (unixTime < minDate) minDate = unixTime
+                        if (unixTime > maxDate) maxDate = unixTime
                         objectStore.add({
                             id: uuidv1(),
                             name: data[0],
@@ -49,6 +53,7 @@ class Upload extends Component {
                         data: evt.target.result
                     }, () => {
                         this.props.dataToMap(this.state.data)
+                        this.props.changeDates(minDate, maxDate)
                         $('#progress').text('Done. You can start using GeoModal')
                         $('.data-upload').css('display', 'none')
                         $('.data-upload-beforeafter').css('display', 'none')
@@ -124,7 +129,8 @@ class Upload extends Component {
 const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => ({
-    dataToMap: (data) => dispatch(changeData(data))
+    dataToMap: (data) => dispatch(changeData(data)),
+    changeDates : (start, end) => dispatch(changeDates(start, end))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Upload)

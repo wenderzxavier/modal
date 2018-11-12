@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import L from 'leaflet'
 import { connect } from 'react-redux'
-import { Marker, LayersControl, LayerGroup, TileLayer } from 'react-leaflet'
+import { Marker, LayersControl, LayerGroup, TileLayer, Popup } from 'react-leaflet'
 import mapTypes from '../../utils/MapLayerData'
 import AntennaIcon from '../../img/geodata/AntennaIcon'
 import MarkerIcon from '../../img/geodata/MarkerIcon';
@@ -78,6 +78,8 @@ class MapLayer extends Component {
                                     .filter(register => register.group === value)
                                     .map((register, key) => (
                                         <Marker key={key} position={register.coordinates} icon={icons[value]}>
+                                            <Popup>
+                                            </Popup>
                                         </Marker>
                                     ))
                                 }

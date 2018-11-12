@@ -1,4 +1,4 @@
-import { CHANGE_MARKER, CHANGE_INTERVAL, CHANGE_COLOR, CHANGE_DATA } from './Constants'
+import { CHANGE_MARKER, CHANGE_COLOR, CHANGE_DATA, CHANGE_DATES } from './Constants'
 
 export const changeMarker = (marker) => {
     return {
@@ -14,16 +14,17 @@ export const changeMarkerColor = (color) => {
     }
 }
 
-export const changeVariation = (interval) => {
-    return{
-        type: CHANGE_INTERVAL,
-        interval
-    }
-}
-
 export const changeData = (data) => {
     return{
         type: CHANGE_DATA,
         data
+    }
+}
+
+export const changeDates = (start, end) => {
+    return{
+        type: CHANGE_DATES,
+        start,
+        end
     }
 }

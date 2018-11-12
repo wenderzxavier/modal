@@ -203,3 +203,45 @@
     background-color: #b9bcbe;
     border: #b9bcbe;
 }
+
+.calendar{
+    min-width: 100px;
+    color: white;
+}
+
+#update-mapdata, #reset-data{
+    display: none;
+}
+
+.timeVar-btn{
+    background: white;
+    padding: 10px 20px;
+    color: #20308b;
+    border-radius: 5%;
+    cursor: pointer;
+    border: 2px solid white;
+    margin: 5px 0;
+}
+
+.reset-btn{
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 60px;
+}
+
+.date-picker-icon{
+    font-size: 50px;
+    transition: .2s;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.date-picker-icon:hover{
+    text-shadow: 4px 4px rgb(56, 53, 53), -2px -2px rgb(87, 87, 83);
+    font-size: 52px;
+    transition: .2s;
+}
+
+.interval-display{
+    margin: 0;
+}

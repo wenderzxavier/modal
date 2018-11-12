@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import $ from 'jquery'
-import Plot from 'react-plotly.js'
+// import $ from 'jquery'
+// import Plot from 'react-plotly.js'
 import '../../../styles/MenuItems.css'
 
 class DataOverview extends Component {

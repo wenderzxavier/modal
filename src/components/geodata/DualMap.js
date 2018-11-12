@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import L from 'leaflet'
-import $ from 'jquery'
+// import $ from 'jquery'
 import '../../styles/Map.css'
 
 class DualMap extends Component {
