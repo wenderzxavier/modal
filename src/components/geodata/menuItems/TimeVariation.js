@@ -1,148 +1,203 @@
-import React, { Component } from 'react'
-import { changeData } from '../../../actions';
-import { connect } from 'react-redux'
-import $ from 'jquery'
-import DateRangePicker from 'react-bootstrap-daterangepicker'
-import { staticMap } from '../func/variations'
+import React, { Component } from "react";
+import { changeData, changeVariation } from "../../../actions";
+import { connect } from "react-redux";
+import $ from "jquery";
+import DateRangePicker from "react-bootstrap-daterangepicker";
+import { staticMap, yearVariation } from "../func";
 //import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-daterangepicker/daterangepicker.css';
-import '../../../styles/MenuItems.css'
+import "bootstrap-daterangepicker/daterangepicker.css";
+import "../../../styles/MenuItems.css";
 
 class TimeVariation extends Component {
     constructor(props) {
-        super(props)
-        this.editInterval = this.editInterval.bind(this)
-        this.editVariation = this.editVariation.bind(this)
+        super(props);
+        this.editInterval = this.editInterval.bind(this);
+        this.editVariation = this.editVariation.bind(this);
     }
 
     state = {
         data: [],
-        interval: 'static',
-        startDate: '',
-        endDate: '',
-        startDateUnix: 0,
-        endDateUnix: 0
-    }
+        interval: "static",
+        start: 0,
+        end: 0
+    };
 
     updateMap() {
-        const { data, startDateUnix, endDateUnix } = this.state
-        console.log(this.state.startDateUnix)
-        console.log(this.state.endDateUnix)
-        console.log(this.state.interval)
-        console.log(this.state.startDate)
-        console.log(this.state.endDate)
-        staticMap(startDateUnix, endDateUnix)
-    }
-
-    updateStateInterval(startDate, endDate) {
-        this.setState({
-            startDate,
-            endDate
-        })
+        const { start, end, interval } = this.state;
+        switch (interval) {
+            case 'static':
+            staticMap(start, end)
+                staticMap(start, end)
+                    .then(data => this.props.updateData(data))
+                    .catch(err => console.warn(err))
+                break
+            case 'year':
+                yearVariation(start, end)
+        }
+        this.props.updateVariation(interval, start, end)
     }
 
     editVariation(evt) {
-        $('.check-variation').removeClass('variation-select')
-        $(evt.currentTarget).addClass('variation-select')
-        this.setState({
-            interval: evt.target.id
-        })
+        if (evt.target.id) {
+            $('.check-variation').removeClass('variation-select')
+            $(`#${evt.target.id}`).parent().addClass("variation-select");
+            this.setState({
+                interval: evt.target.id
+            })
+        }
     }
 
     editInterval(evt, picker) {
-        let start = new Date(picker.startDate._d)
-        let end = new Date(picker.endDate._d)
-        let startDate = `${start.getMonth() + 1}/${start.getDate()}/${start.getFullYear()}`
-        let endDate = `${end.getMonth() + 1}/${end.getDate()}/${end.getFullYear()}`
+        let start = Math.round(new Date(picker.startDate._d).getTime() / 1000);
+        let end = Math.round(new Date(picker.endDate._d).getTime() / 1000);
         this.setState({
-            startDate,
-            endDate,
-            startDateUnix: Math.round((new Date(start)).getTime() / 1000),
-            endDateUnix: Math.round((new Date(end)).getTime() / 1000)
-        })
+            start,
+            end
+        });
     }
 
     resetData() {
-        const DBOpenRequest = window.indexedDB.open("openModal", 1);
-        DBOpenRequest.onsuccess = (evt) => {
-            const db = DBOpenRequest.result
-            var transaction = db.transaction(["openModal"], "readwrite");
-            var objectStore = transaction.objectStore("openModal");
-            var request = objectStore.getAll()
-            const startDate = new Date(this.props.startDate * 1000)
-            const endDate = new Date(this.props.endDate * 1000)
-            const formatedStartDate = `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getFullYear()}`
-            const formatedEndDate = `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getFullYear()}`
-            request.onsuccess = (evt) => (
-                this.setState({
-                    data: evt.target.result,
-                    startDate: formatedStartDate,
-                    endDate: formatedEndDate
-                }, () => this.props.updateData(this.state.data))
-            )
-            $('.check-variation').removeClass('variation-select')
-            $('#static').parent().addClass('variation-select')
-        }
-        DBOpenRequest.result.close()
+        const { resetStart, resetEnd } = this.props;
+        let data = staticMap(this.props.resetStart, this.props.resetEnd);
+        this.setState(
+            {
+                data,
+                interval: "static",
+                start: resetStart,
+                end: resetEnd
+            },
+            () => this.props.updateVariation("static", resetStart, resetEnd)
+        );
+    }
+
+    componentWillMount() {
+        const { data, interval, start, end } = this.props;
+        this.setState({
+            data,
+            interval,
+            start,
+            end
+        });
     }
 
     componentDidMount() {
-        const startDate = new Date(this.props.startDate * 1000)
-        const endDate = new Date(this.props.endDate * 1000)
-        const formatedStartDate = `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getFullYear()}`
-        const formatedEndDate = `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getFullYear()}`
-        this.setState({
-            data: this.props.data,
-            startDate: formatedStartDate,
-            endDate: formatedEndDate,
-            startDateUnix: this.props.startDate,
-            endDateUnix: this.props.endDate
-        })
+        $(`#${this.props.interval}`)
+            .parent()
+            .addClass("variation-select");
     }
 
     render() {
-        const startDate = new Date(this.props.startDate * 1000)
-        const endDate = new Date(this.props.endDate * 1000)
-        const formatedStartDate = `${startDate.getDate()}/${startDate.getMonth() + 1}/${startDate.getFullYear()}`
-        const formatedEndDate = `${endDate.getDate()}/${endDate.getMonth() + 1}/${endDate.getFullYear()}`
+        const { start, end, resetStart, resetEnd } = this.props;
+        const startDate = new Date(start * 1000);
+        const endDate = new Date(end * 1000);
+        const lowerDate = new Date(resetStart * 1000);
+        const higherDate = new Date(resetEnd * 1000);
+        const lowerBoundDate = `${lowerDate.getMonth() +
+            1}/${lowerDate.getDate()}/${lowerDate.getFullYear()}`;
+        const higherBoundDate = `${higherDate.getMonth() +
+            1}/${higherDate.getDate() + 1}/${higherDate.getFullYear()}`;
+        const formatedStartDate = `${startDate.getMonth() +
+            1}/${startDate.getDate()}/${startDate.getFullYear()}`;
+        const formatedEndDate = `${endDate.getMonth() + 1}/${endDate.getDate() +
+            1}/${endDate.getFullYear()}`;
+
         return (
-            <div className='menu-content'>
-                <label htmlFor='update-mapdata' className='timeVar-btn' onClick={() => this.updateMap()}><input type='button' id='update-mapdata'></input>Update Map Data</label>
-                <label htmlFor='reset-data' className='reset-btn'>
-                    <i className="fas fa-undo"></i>
-                    <input id='reset-data' type='button' onClick={() => this.resetData()}></input> Reset Data
-                </label>
+            <div className="menu-content">
+                <label
+                    htmlFor="update-mapdata"
+                    className="timeVar-btn"
+                >
+                    <input type="button" id="update-mapdata" onClick={() => this.updateMap()} />
+                    Update Map Data
+        </label>
+                <label htmlFor="reset-data" className="reset-btn">
+                    <i className="fas fa-undo" />
+                    <input
+                        id="reset-data"
+                        type="button"
+                        onClick={() => this.resetData()}
+                    />
+                    Reset Data
+        </label>
                 <p>Select Date-Range to Analyze:</p>
-                <DateRangePicker minDate={formatedStartDate} maxDate={formatedEndDate} startDate={formatedStartDate} endDate={formatedEndDate} onApply={this.editInterval}>
-                    <label className='date-picker'>
-                        <i className="far fa-calendar-alt calendar date-picker-icon"></i>
+                <DateRangePicker
+                    minDate={lowerBoundDate}
+                    maxDate={higherBoundDate}
+                    startDate={formatedStartDate}
+                    endDate={formatedEndDate}
+                    onApply={this.editInterval}
+                >
+                    <label className="date-picker">
+                        <i className="far fa-calendar-alt calendar date-picker-icon" />
                     </label>
                 </DateRangePicker>
-                <p className='interval-display'>Start Date: {this.state.startDate}</p>
-                <p className='interval-display'>End Date: {this.state.endDate}</p>
+                <p id="start-date" className="interval-display">
+                    Current Start: {formatedStartDate}
+                </p>
+                <p id="end-date" className="interval-display">
+                    Current End: {formatedEndDate}
+                </p>
                 <div>
                     <header>Intervals</header>
-                    <div className='select-variation'>
-                        <label htmlFor='static' className='check-variation variation-select' onClick={(evt) => this.editVariation(evt)}><input id='static' type='checkbox' name='variation'></input> Static</label>
-                        <label htmlFor='year' className='check-variation' onClick={(evt) => this.editVariation(evt)}><input id='year' type='checkbox' name='variation'></input> Year</label>
-                        <label htmlFor='month' className='check-variation' onClick={(evt) => this.editVariation(evt)}><input id='month' type='checkbox' name='variation'></input> Month</label>
-                        <label htmlFor='day' className='check-variation' onClick={(evt) => this.editVariation(evt)}><input id='day' type='checkbox' name='variation'></input> Day</label>
-                        <label htmlFor='hour' className='check-variation' onClick={(evt) => this.editVariation(evt)}><input id='hour' type='checkbox' name='variation'></input> Hour</label>
+                    <div className="select-variation">
+                        <label
+                            htmlFor="static"
+                            className="check-variation"
+                            onClick={evt => this.editVariation(evt)}
+                        >
+                            <input id="static" type="checkbox" name="variation" /> Static
+            </label>
+                        <label
+                            htmlFor="year"
+                            className="check-variation"
+                            onClick={evt => this.editVariation(evt)}
+                        >
+                            <input id="year" type="checkbox" name="variation" /> Year
+            </label>
+                        <label
+                            htmlFor="month"
+                            className="check-variation"
+                            onClick={evt => this.editVariation(evt)}
+                        >
+                            <input id="month" type="checkbox" name="variation" /> Month
+            </label>
+                        <label
+                            htmlFor="day"
+                            className="check-variation"
+                            onClick={evt => this.editVariation(evt)}
+                        >
+                            <input id="day" type="checkbox" name="variation" /> Day
+            </label>
+                        <label
+                            htmlFor="hour"
+                            className="check-variation"
+                            onClick={evt => this.editVariation(evt)}
+                        >
+                            <input id="hour" type="checkbox" name="variation" /> Hour
+            </label>
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 
 const mapStateToProps = state => ({
     data: state.data,
-    startDate: state.start,
-    endDate: state.end
-})
+    interval: state.variation.variationType,
+    start: state.variation.range.start,
+    end: state.variation.range.end,
+    resetStart: state.range.start,
+    resetEnd: state.range.end
+});
 
 const mapDispatchToProps = dispatch => ({
-    updateData: (data) => dispatch(changeData(data))
-})
+    updateData: data => dispatch(changeData(data)),
+    updateVariation: (type, start, end) =>
+        dispatch(changeVariation(type, start, end))
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimeVariation)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TimeVariation);

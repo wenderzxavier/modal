@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import $ from 'jquery'
 import { connect } from 'react-redux'
 import "../../../styles/MenuItems.css";
-import { changeData, changeDates } from "../../../actions";
+import { changeData, changeDates, changeVariation } from "../../../actions";
+import { reduceData } from '../func'
 
 const uuidv1 = require('uuid/v1');
 
@@ -26,16 +27,15 @@ class Upload extends Component {
                 const db = DBOpenRequest.result
                 var transaction = db.transaction(["openModal"], "readwrite");
                 var objectStore = transaction.objectStore("openModal");
-                var timezone = new Date().getTimezoneOffset() / -60
                 var minDate = Math.round(new Date().getTime() / 1000)
                 var maxDate = 0
                 for (let i = 1; i < allTextLines.length; i++) {
                     let data = allTextLines[i].split(';')
                     if ( Object.keys(data).length === 5 ) {
                         let coordinates = data[1].split(',')
-                        let unixTime = new Date((new Date(data[2]).getTime()) + (timezone * 60 * 60 * 1000)).getTime() / 1000
-                        if (unixTime < minDate) minDate = unixTime
-                        if (unixTime > maxDate) maxDate = unixTime
+                        let unixTime = new Date(data[2]).getTime() / 1000
+                        if (unixTime <= minDate) minDate = unixTime
+                        if (unixTime >= maxDate) maxDate = unixTime
                         objectStore.add({
                             id: uuidv1(),
                             name: data[0],
@@ -48,23 +48,25 @@ class Upload extends Component {
                 }
                 console.log('Completed')
                 var request = objectStore.getAll()
-                request.onsuccess = (evt) => (
+                request.onsuccess = (evt) => {
+                    const displayData = reduceData(evt.target.result)
                     this.setState({
-                        data: evt.target.result
+                        data: displayData
                     }, () => {
                         this.props.dataToMap(this.state.data)
                         this.props.changeDates(minDate, maxDate)
+                        this.props.changeVariation('static', minDate, maxDate)
                         $('#progress').text('Done. You can start using GeoModal')
                         $('.data-upload').css('display', 'none')
                         $('.data-upload-beforeafter').css('display', 'none')
                         $('.data-analyses').css('display', 'flex')                                
                     })
-                )
+                }
             }
         }
     }
 
-    previewData() {
+    createDB() {
         let file = $('#input-data')[0].files[0]
         this.setState({
             fileName: file.name,
@@ -79,10 +81,8 @@ class Upload extends Component {
         req.onsuccess = () => console.log('Database opened successfully');
         req.onupgradeneeded = function (evt) {
             var db = evt.target.result;
-
             // Create an objectStore for this database
             var objectStore = db.createObjectStore("openModal", { keyPath: "id" });
-
             // define what data items the objectStore will contain
             objectStore.createIndex("name", "name", { unique: false });
             objectStore.createIndex("coordinates", "coordinates", { unique: false });
@@ -104,7 +104,7 @@ class Upload extends Component {
                         <div className='input-area menu-content'>
                             <label htmlFor="input-data" className="input-item">
                                 <i className="fas fa-file-upload fa-lg"></i>Upload File
-                        <input id="input-data" className='input-btn' type="file" accept=".csv,.json" onChange={() => this.previewData()} />
+                        <input id="input-data" className='input-btn' type="file" accept=".csv,.json" onChange={() => this.createDB()} />
                             </label>
                         </div>
                         {fileName === '' ? '' :
@@ -130,7 +130,8 @@ const mapStateToProps = state => ({})
 
 const mapDispatchToProps = dispatch => ({
     dataToMap: (data) => dispatch(changeData(data)),
-    changeDates : (start, end) => dispatch(changeDates(start, end))
+    changeDates : (start, end) => dispatch(changeDates(start, end)),
+    changeVariation : (type, start, end) => dispatch(changeVariation(type, start, end))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Upload)

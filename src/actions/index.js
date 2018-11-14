@@ -1,4 +1,4 @@
-import { CHANGE_MARKER, CHANGE_COLOR, CHANGE_DATA, CHANGE_DATES } from './Constants'
+import { CHANGE_MARKER, CHANGE_COLOR, CHANGE_DATA, CHANGE_DATES, CHANGE_VARIATION } from './Constants'
 
 export const changeMarker = (marker) => {
     return {
@@ -24,6 +24,15 @@ export const changeData = (data) => {
 export const changeDates = (start, end) => {
     return{
         type: CHANGE_DATES,
+        start,
+        end
+    }
+}
+
+export const changeVariation = ( variationType, start, end ) => {
+    return{
+        type: CHANGE_VARIATION,
+        variationType,
         start,
         end
     }
