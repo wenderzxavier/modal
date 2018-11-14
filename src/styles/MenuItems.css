@@ -245,3 +245,26 @@
 .interval-display{
     margin: 0;
 }
+
+.select-variation {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.check-variation{
+    padding: 5px;
+    margin: 5px;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+.check-variation input{
+    display: none;
+}
+
+.variation-select{
+    background: white;
+    color: #20308b;
+}
