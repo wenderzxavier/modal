@@ -3,7 +3,7 @@ import { changeData, changeVariation } from "../../../actions";
 import { connect } from "react-redux";
 import $ from "jquery";
 import DateRangePicker from "react-bootstrap-daterangepicker";
-import { staticMap, yearVariation } from "../func";
+import { staticMap, yearVariation, monthVariation, dayVariation, hourVariation } from "../func";
 //import 'bootstrap/dist/css/bootstrap.css';
 import "bootstrap-daterangepicker/daterangepicker.css";
 import "../../../styles/MenuItems.css";
@@ -26,13 +26,31 @@ class TimeVariation extends Component {
         const { start, end, interval } = this.state;
         switch (interval) {
             case 'static':
-            staticMap(start, end)
                 staticMap(start, end)
                     .then(data => this.props.updateData(data))
                     .catch(err => console.warn(err))
                 break
             case 'year':
                 yearVariation(start, end)
+                    .then(data => console.log(data))
+                    .catch(err => console.warn(err))
+                break
+            case 'month':
+                monthVariation(start, end)
+                    .then(data => console.log(data))
+                    .catch(err => console.warn(err))
+                break
+            case 'day':
+                dayVariation(start, end)
+                    .then(data => console.log(data))
+                    .catch(err => console.warn(err))
+                break
+            case 'hour':
+                hourVariation(start, end)
+                    .then(data => console.log(data))
+                    .catch(err => console.warn(err))
+                break
+
         }
         this.props.updateVariation(interval, start, end)
     }
@@ -66,7 +84,11 @@ class TimeVariation extends Component {
                 start: resetStart,
                 end: resetEnd
             },
-            () => this.props.updateVariation("static", resetStart, resetEnd)
+            () => {
+                this.props.updateVariation("static", resetStart, resetEnd)
+                $('.check-variation').removeClass('variation-select')
+                $(`#static`).parent().addClass("variation-select");    
+            }
         );
     }
 
