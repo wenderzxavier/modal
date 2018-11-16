@@ -56,9 +56,10 @@ class Upload extends Component {
                         this.props.dataToMap(this.state.data)
                         this.props.changeDates(minDate, maxDate)
                         this.props.changeVariation('static', minDate, maxDate)
+                        $('#input-section').css('display', 'none')
+                        $('#submitBtn').css('display', 'none')
                         $('#progress').text('Done. You can start using GeoModal')
                         $('.data-upload').css('display', 'none')
-                        $('.data-upload-beforeafter').css('display', 'none')
                         $('.data-analyses').css('display', 'flex')                                
                     })
                 }
@@ -66,12 +67,14 @@ class Upload extends Component {
         }
     }
 
-    createDB() {
-        let file = $('#input-data')[0].files[0]
-        this.setState({
-            fileName: file.name,
-            fileSize: file.size
-        })
+    createDB(evt) {
+        if (evt){
+            let file = evt.target.files[0]
+            this.setState({
+                fileName: file.name,
+                fileSize: file.size
+            })    
+        }
         const indexedDB = window.indexedDB ||    // Use the standard DB API
             window.mozIndexedDB ||             // Or Firefox's early version of it
             window.webkitIndexedDB;            // Or Chrome's early version   
@@ -92,6 +95,16 @@ class Upload extends Component {
         };
     }
 
+    startEmptyMap(){
+        this.createDB(undefined)
+        let date = Math.round(new Date().getTime() / 1000)
+        this.props.changeDates(date, date)
+        this.props.changeVariation('static', date, date)
+        $('#menu-selected').css('width', '0px')
+        $('.data-upload').css('display', 'none')
+        $('.data-analyses').css('display', 'flex')                           
+    }
+
     render() {
         const { fileName, fileSize } = this.state
         const indexedDB = window.indexedDB ||    // Use the standard DB API
@@ -101,15 +114,16 @@ class Upload extends Component {
             <div className="menu-content">
                 {indexedDB ? (
                     <form action="/">
-                        <div className='input-area menu-content'>
+                        <div className='input-area menu-content' id='input-section'>
                             <label htmlFor="input-data" className="input-item">
                                 <i className="fas fa-file-upload fa-lg"></i>Upload File
-                        <input id="input-data" className='input-btn' type="file" accept=".csv,.json" onChange={() => this.createDB()} />
+                        <input id="input-data" className='input-btn' type="file" accept=".csv,.json" onChange={(evt) => this.createDB(evt)} />
                             </label>
+                            <p className='startEmpty' onClick={() => this.startEmptyMap()}> or Start with Blank Map</p>
                         </div>
                         {fileName === '' ? '' :
                             <div>
-                                <div>
+                                <div id='file-info'>
                                     <p>File: {fileName}</p>
                                     <p>Size: {fileSize / 1000}KB</p>
                                 </div>

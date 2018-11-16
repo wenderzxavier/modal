@@ -5,7 +5,6 @@ import Marker from '../components/geodata/menuItems/Marker'
 import DataOverview from '../components/geodata/menuItems/DataOverview'
 import TimeVariation from '../components/geodata/menuItems/TimeVariation'
 import AddMap from '../components/geodata/menuItems/AddMap'
-// import BeforeAfter from '../components/geodata/menuItems/BeforeAfter'
 
 const MenuData = [
     {
@@ -15,13 +14,6 @@ const MenuData = [
         data: <Upload />,
         class: 'menu-item data-upload'
     },
-/*    {
-        name: 'Before-After',
-        id: 'beforeAfter',
-        icon: <i className="fas fa-map-marked-alt fa-lg"></i>,
-        data: <BeforeAfter />,
-        class: 'menu-item data-upload-beforeafter'
-    },*/
     {
         name: 'Layers',
         id: 'layers',
