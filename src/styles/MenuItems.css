@@ -274,3 +274,46 @@
     background: white;
     color: #20308b;
 }
+
+.gradient-scale{
+    height: auto;
+    min-height: 22px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 3px solid transparent;
+    cursor: pointer;
+}
+
+.gradient{
+    width: 100%;
+    text-align: left;
+    margin: 5px auto;
+}
+
+.gradient p{
+    margin: 0;
+}
+
+.gradient-select{
+    border: 3px solid white;
+}
+
+
+.heatmap-btn{
+    margin: 10px 0;
+    width: 80%;
+    height: 40px;
+    border-radius: 2%;
+    border: none;
+    background: white;
+    font-size: 15px;
+    cursor: pointer;
+    color: #20308b;
+    transition: .2s;
+}
+
+.heatmap-btn:hover{
+    transition: .2s;
+    transform: scale(1.05);
+    box-shadow: 2px 2px 15px white, -2px -2px 15px white;
+}

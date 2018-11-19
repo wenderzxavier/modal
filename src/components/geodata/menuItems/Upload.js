@@ -61,6 +61,7 @@ class Upload extends Component {
                         $('#progress').text('Done. You can start using GeoModal')
                         $('.data-upload').css('display', 'none')
                         $('.data-analyses').css('display', 'flex')                                
+                        $('.data-analyses-variation').css('display', 'flex')                                
                     })
                 }
             }

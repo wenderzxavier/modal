@@ -1,6 +1,7 @@
 import React from 'react'
 import Upload from '../components/geodata/menuItems/Upload'
 import Layers from '../components/geodata/menuItems/Layers'
+import Heatmap from '../components/geodata/menuItems/Heatmap'
 import Marker from '../components/geodata/menuItems/Marker'
 import DataOverview from '../components/geodata/menuItems/DataOverview'
 import TimeVariation from '../components/geodata/menuItems/TimeVariation'
@@ -15,7 +16,7 @@ const MenuData = [
         class: 'menu-item data-upload'
     },
     {
-        name: 'Layers',
+        name: 'Map Layer',
         id: 'layers',
         icon: <i className="fas fa-layer-group fa-lg"></i>,
         data: <Layers />,
@@ -26,6 +27,13 @@ const MenuData = [
         id: 'marker',
         icon: <i className="fas fa-map-marker-alt fa-lg"></i>,
         data: <Marker />,
+        class: 'menu-item data-analyses'
+    },
+    {
+        name: 'Heatmap',
+        id: 'heatmap',
+        icon: <i className='far fa-map fa-lg'></i>,
+        data: <Heatmap />,
         class: 'menu-item data-analyses'
     },
     {

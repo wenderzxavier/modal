@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Map } from 'react-leaflet'
-// import MarkerColor from '../../utils/MarkerColors'
 import MapLayer from './MapLayer'
 import '../../styles/Map.css'
 

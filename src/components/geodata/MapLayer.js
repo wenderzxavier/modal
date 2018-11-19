@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import L from 'leaflet'
 import { connect } from 'react-redux'
-import { Marker, LayersControl, LayerGroup, TileLayer, Popup } from 'react-leaflet'
+import { Marker, LayersControl, LayerGroup, TileLayer, Popup, FeatureGroup } from 'react-leaflet'
 import mapTypes from '../../utils/MapLayerData'
 import AntennaIcon from '../../img/geodata/AntennaIcon'
 import MarkerIcon from '../../img/geodata/MarkerIcon';
@@ -11,6 +11,7 @@ import BusIcon from '../../img/geodata/BusIcon';
 import CarIcon from '../../img/geodata/CarIcon';
 import PersonIcon from '../../img/geodata/PersonIcon';
 import PinIcon from '../../img/geodata/PinIcon';
+import HeatMapLayer from 'react-leaflet-heatmap-layer'
 
 class MapLayer extends Component {
     getMarkerType(type, group) {
@@ -59,7 +60,7 @@ class MapLayer extends Component {
 
     render() {
         const { BaseLayer, Overlay } = LayersControl
-        const { data } = this.props
+        const { data, heatmap } = this.props
         let icons = this.updateIcon()
         return (
             <LayersControl position="topright">
@@ -74,18 +75,32 @@ class MapLayer extends Component {
                 {[0, 1, 2, 3].map((value) => (
                     <Overlay key={value} name={`Group #${value}`} checked>
                         <LayerGroup>
-                                {data
-                                    .filter(register => register.group === value)
-                                    .map((register, key) => (
-                                        <Marker key={key} position={register.coordinates} icon={icons[value]}>
-                                            <Popup>
-                                            </Popup>
-                                        </Marker>
-                                    ))
-                                }
+                            {data
+                                .filter(register => register.group === value)
+                                .map((register, key) => (
+                                    <Marker key={key} position={register.coordinates} icon={icons[value]}>
+                                        <Popup>
+                                        </Popup>
+                                    </Marker>
+                                ))
+                            }
                         </LayerGroup>
                     </Overlay>
                 ))}
+                <Overlay className='heatmap-layer-control' name='Heatmap'>
+                    <FeatureGroup>
+                        <HeatMapLayer
+                            fitBoundsOnLoad
+                            fitBoundsOnUpdate
+                            points={data}
+                            latitudeExtractor={position => position.coordinates[0]}
+                            longitudeExtractor={position => position.coordinates[1]}
+                            intensityExtractor={position => position.load}
+                            minOpacity={.1}
+                            gradient={heatmap.gradient}
+                        />
+                    </FeatureGroup>
+                </Overlay>
             </LayersControl>
         )
     }
@@ -95,6 +110,7 @@ const mapStateToProps = (state) => ({
     markerType: state.marker,
     markerColor: state.color,
     data: state.data,
+    heatmap: state.heatmap
 })
 
 export default connect(mapStateToProps)(MapLayer)
