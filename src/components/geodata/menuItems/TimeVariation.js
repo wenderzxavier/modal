@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { changeData, changeVariation } from "../../../actions";
 import { connect } from "react-redux";
 import $ from "jquery";
+import Slider from 'rc-slider';
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import { staticMap, yearVariation, monthVariation, dayVariation, hourVariation } from "../func";
-//import 'bootstrap/dist/css/bootstrap.css';
 import "bootstrap-daterangepicker/daterangepicker.css";
+import 'rc-slider/assets/index.css';
 import "../../../styles/MenuItems.css";
 
 class TimeVariation extends Component {
@@ -17,9 +18,14 @@ class TimeVariation extends Component {
 
     state = {
         data: [],
-        interval: "static",
+        interval: 'static',
         start: 0,
-        end: 0
+        end: 0,
+        slider: {
+            max: 0,
+            marks: {},
+            selected: 0
+        }
     };
 
     updateMap() {
@@ -27,12 +33,20 @@ class TimeVariation extends Component {
         switch (interval) {
             case 'static':
                 staticMap(start, end)
-                    .then(data => this.props.updateData(data))
+                    .then(data => {
+                        this.setState({
+                            data,
+                        }, () => {
+                            this.props.updateData(data)
+                        })
+                    })
                     .catch(err => console.warn(err))
                 break
             case 'year':
                 yearVariation(start, end)
-                    .then(data => console.log(data))
+                    .then(data => {
+                        this.setState({data})
+                    })
                     .catch(err => console.warn(err))
                 break
             case 'month':
@@ -53,6 +67,10 @@ class TimeVariation extends Component {
 
         }
         this.props.updateVariation(interval, start, end)
+    }
+
+    retrieveSliderData() {
+        console.log('Retrieve')
     }
 
     editVariation(evt) {
@@ -87,18 +105,19 @@ class TimeVariation extends Component {
             () => {
                 this.props.updateVariation("static", resetStart, resetEnd)
                 $('.check-variation').removeClass('variation-select')
-                $(`#static`).parent().addClass("variation-select");    
+                $(`#static`).parent().addClass("variation-select");
             }
         );
     }
 
     componentWillMount() {
-        const { data, interval, start, end } = this.props;
+        const { interval, start, end, slider } = this.props;
         this.setState({
-            data,
+            data: slider.data,
             interval,
             start,
-            end
+            end,
+            slider
         });
     }
 
@@ -109,7 +128,14 @@ class TimeVariation extends Component {
     }
 
     render() {
-        const { start, end, resetStart, resetEnd } = this.props;
+        const marks = {
+            0: <strong>0°C</strong>,
+            2: '26°C',
+            3: '37°C',
+            4: '50°C',
+          };
+
+        const { start, end, resetStart, resetEnd, interval } = this.props;
         const startDate = new Date(start * 1000);
         const endDate = new Date(end * 1000);
         const lowerDate = new Date(resetStart * 1000);
@@ -199,12 +225,18 @@ class TimeVariation extends Component {
             </label>
                     </div>
                 </div>
+                {interval === 'static' ? '' :
+                    <div id='sliderVariation'>
+                        <Slider vertical min={0} marks={marks} defaultValue={0} max={5} />
+                    </div>
+                }
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
+    slider: state.slider,
     data: state.data,
     interval: state.variation.variationType,
     start: state.variation.range.start,
@@ -216,7 +248,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     updateData: data => dispatch(changeData(data)),
     updateVariation: (type, start, end) =>
-        dispatch(changeVariation(type, start, end))
+        dispatch(changeVariation(type, start, end)),
 });
 
 export default connect(

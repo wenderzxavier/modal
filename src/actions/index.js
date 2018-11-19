@@ -1,4 +1,4 @@
-import { CHANGE_MARKER, CHANGE_COLOR, CHANGE_DATA, CHANGE_DATES, CHANGE_VARIATION, CHANGE_GRADIENT, CHANGE_MAX_HEATMAP } from './Constants'
+import { CHANGE_MARKER, CHANGE_COLOR, CHANGE_DATA, CHANGE_DATES, CHANGE_VARIATION, CHANGE_GRADIENT, CHANGE_MAX_HEATMAP, CHANGE_SLIDER, UPDATE_SLIDER } from './Constants'
 
 export const changeMarker = (marker) => {
     return {
@@ -46,9 +46,27 @@ export const changeGradient = ( name, gradient ) => {
     }
 }
 
-export const changeMaxHeatmap = (max) => {
+export const changeMaxHeatmap = (maxHeatmap) => {
     return {
         type: CHANGE_MAX_HEATMAP,
-        max
+        maxHeatmap
+    }
+}
+
+export const changeSlider = (data, max, marks, selected=0) => {
+    return{
+        type: CHANGE_SLIDER,
+        max,
+        marks,
+        selected,
+        data
+    }
+}
+
+export const updateSlider = (data, selected) => {
+    return{
+        type: UPDATE_SLIDER,
+        data,
+        selected
     }
 }

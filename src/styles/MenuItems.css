@@ -317,3 +317,8 @@
     transform: scale(1.05);
     box-shadow: 2px 2px 15px white, -2px -2px 15px white;
 }
+
+#sliderVariation{
+    width: 100px;
+    height: 200px;
+}
