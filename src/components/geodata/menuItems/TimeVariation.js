@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { changeData, changeVariation } from "../../../actions";
+import { changeData, changeVariation, changeSlider, updateSlider } from "../../../actions";
 import { connect } from "react-redux";
 import $ from "jquery";
 import Slider from 'rc-slider';
@@ -14,6 +14,7 @@ class TimeVariation extends Component {
         super(props);
         this.editInterval = this.editInterval.bind(this);
         this.editVariation = this.editVariation.bind(this);
+        this.updateSlider = this.updateSlider.bind(this)
     }
 
     state = {
@@ -27,6 +28,34 @@ class TimeVariation extends Component {
             selected: 0
         }
     };
+
+    updateSlider(value){
+        console.log(value)
+        console.log(this.state.data)
+        let key = Object.keys(this.state.data)[value]
+        this.props.updateSlider(this.state.data[key], value)
+    }
+
+    getMarks = () => {
+        const { data } = this.state
+        let keys = Object.keys(data)
+        var marks = {}
+        var max = 0
+        if (keys.length > 0) {
+            max = keys.length-1
+            for (let i = 0; i < 5; i++) {
+                let pos = Math.round((i / 4) * (max))
+                marks[pos] = keys[pos]
+            }
+        }
+        this.setState({
+            slider: {
+                max,
+                marks,
+                selected: 0
+            }
+        }, () => this.props.changeSlider(data, max, marks))
+    }
 
     updateMap() {
         const { start, end, interval } = this.state;
@@ -45,23 +74,50 @@ class TimeVariation extends Component {
             case 'year':
                 yearVariation(start, end)
                     .then(data => {
-                        this.setState({data})
+                        this.setState({
+                            data
+                        }, () => {
+                            this.getMarks()
+                            this.updateSlider(0)
+                        })
                     })
                     .catch(err => console.warn(err))
                 break
             case 'month':
                 monthVariation(start, end)
-                    .then(data => console.log(data))
+                    .then(data => {
+                        this.setState({
+                            data
+                        }, () => {
+                            this.getMarks()
+                            this.updateSlider(0)
+                        })
+                    })
                     .catch(err => console.warn(err))
                 break
             case 'day':
                 dayVariation(start, end)
-                    .then(data => console.log(data))
+                    .then(data => {
+                        console.log(data)
+                        this.setState({
+                            data
+                        }, () => {
+                            this.getMarks()
+                            this.updateSlider(0)
+                        })
+                    })
                     .catch(err => console.warn(err))
                 break
             case 'hour':
                 hourVariation(start, end)
-                    .then(data => console.log(data))
+                    .then(data => {
+                        this.setState({
+                            data
+                        }, () => {
+                            this.getMarks()
+                            this.updateSlider(0)
+                        })
+                    })
                     .catch(err => console.warn(err))
                 break
 
@@ -111,6 +167,7 @@ class TimeVariation extends Component {
     }
 
     componentWillMount() {
+        console.log('Will Mount')
         const { interval, start, end, slider } = this.props;
         this.setState({
             data: slider.data,
@@ -128,13 +185,7 @@ class TimeVariation extends Component {
     }
 
     render() {
-        const marks = {
-            0: <strong>0°C</strong>,
-            2: '26°C',
-            3: '37°C',
-            4: '50°C',
-          };
-
+        const { slider } = this.state
         const { start, end, resetStart, resetEnd, interval } = this.props;
         const startDate = new Date(start * 1000);
         const endDate = new Date(end * 1000);
@@ -227,7 +278,7 @@ class TimeVariation extends Component {
                 </div>
                 {interval === 'static' ? '' :
                     <div id='sliderVariation'>
-                        <Slider vertical min={0} marks={marks} defaultValue={0} max={5} />
+                        <Slider vertical min={0} marks={slider.marks} onChange={this.updateSlider} defaultValue={slider.selected} max={slider.max} />
                     </div>
                 }
             </div>
@@ -249,6 +300,8 @@ const mapDispatchToProps = dispatch => ({
     updateData: data => dispatch(changeData(data)),
     updateVariation: (type, start, end) =>
         dispatch(changeVariation(type, start, end)),
+    changeSlider: (data, max, marks) => dispatch(changeSlider(data, max, marks)),
+    updateSlider: (data, selected) => dispatch(updateSlider(data, selected))
 });
 
 export default connect(

@@ -89,7 +89,7 @@ class MapLayer extends Component {
                 ))}
                 <Overlay className='heatmap-layer-control' name='Heatmap'>
                     <FeatureGroup>
-                        <HeatMapLayer
+                        {/* <HeatMapLayer
                             fitBoundsOnLoad
                             fitBoundsOnUpdate
                             points={data}
@@ -98,7 +98,7 @@ class MapLayer extends Component {
                             intensityExtractor={position => position.load}
                             minOpacity={.1}
                             gradient={heatmap.gradient}
-                        />
+                        /> */}
                     </FeatureGroup>
                 </Overlay>
             </LayersControl>
