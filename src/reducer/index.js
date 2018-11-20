@@ -7,7 +7,8 @@ import {
   CHANGE_MAX_HEATMAP,
   CHANGE_GRADIENT,
   CHANGE_SLIDER,
-  UPDATE_SLIDER
+  UPDATE_SLIDER,
+  CHANGE_MARKER_OVERVIEW
 } from "../actions/Constants";
 
 const initialMapState = {
@@ -43,7 +44,9 @@ const initialMapState = {
     marks: {},
     selected: 0,
     data: []
-  }
+  },
+  markerName : '',
+  markerData: []
 };
 
 const reducer = (state = initialMapState, action) => {
@@ -60,6 +63,8 @@ const reducer = (state = initialMapState, action) => {
     max,
     marks,
     selected,
+    markerName,
+    markerData
   } = action;
   switch (action.type) {
     case CHANGE_COLOR:
@@ -133,6 +138,12 @@ const reducer = (state = initialMapState, action) => {
           selected
         }
       };
+    case CHANGE_MARKER_OVERVIEW:
+      return{
+        ...state,
+        markerName,
+        markerData
+      }
     default:
       return state;
   }

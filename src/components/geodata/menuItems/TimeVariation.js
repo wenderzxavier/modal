@@ -167,7 +167,6 @@ class TimeVariation extends Component {
     }
 
     componentWillMount() {
-        console.log('Will Mount')
         const { interval, start, end, slider } = this.props;
         this.setState({
             data: slider.data,

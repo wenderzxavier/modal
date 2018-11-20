@@ -22,6 +22,32 @@ export const retrieveData = (start, end) => {
   })
 }
 
+export const retrieveTimestampData = (marker) => {
+  return new Promise(res => {
+    var data = [];
+    const DBopenRequest = window.indexedDB.open("openModal", 1);
+    DBopenRequest.onsuccess = () => {
+      console.log(marker)
+      var db = DBopenRequest.result;
+      const singleKeyRange = IDBKeyRange.only(marker);
+      var transaction = db.transaction("openModal", "readonly");
+      var objectStore = transaction.objectStore("openModal");
+      objectStore = objectStore.index("name");
+      objectStore.openCursor(singleKeyRange).onsuccess = event => {
+        var cursor = event.target.result;
+        if (cursor) {
+          data.push(cursor.value);
+          cursor.continue();
+        } else console.log("Marker Query Finished.");
+      }
+      transaction.oncomplete = () => {
+        data = reduceByTimestamp(data)
+        res(data)
+      }
+    }
+  })
+}
+
 export const staticMap = (start, end) => {
   return new Promise(res => {
     retrieveData(start, end)
@@ -171,3 +197,29 @@ export const reduceData = data => {
   });
   return result;
 };
+
+export const reduceByTimestamp = data => {
+  const uniqueKeys = getUniqueValuesOfKey(data, "timestamp");
+  let result = [];
+  uniqueKeys.map(key => {
+    var currentRegister = {
+      name: '',
+      coordinates: "",
+      timestamp: key,
+      load: 0,
+      group: 0
+    };
+    return result.push(
+      data.reduce((accumulator, item) => {
+        if (item.timestamp === accumulator.timestamp) {
+          accumulator.name = item.name;
+          accumulator.load += item.load;
+          accumulator.coordinates = item.coordinates;
+          accumulator.group = item.group;
+        }
+        return accumulator;
+      }, currentRegister)
+    );
+  });
+  return result;
+}

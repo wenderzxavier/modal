@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import L from 'leaflet'
 import { connect } from 'react-redux'
+import { retrieveTimestampData } from './func'
+import { changeMarkerOverview } from '../../actions'
 import { Marker, LayersControl, LayerGroup, TileLayer, Popup, FeatureGroup } from 'react-leaflet'
 import mapTypes from '../../utils/MapLayerData'
 import AntennaIcon from '../../img/geodata/AntennaIcon'
@@ -38,6 +40,13 @@ class MapLayer extends Component {
             default:
                 return <MarkerIcon fill={fillColor} />
         }
+    }
+
+    updateMarkerName(marker) {
+        retrieveTimestampData(marker)
+            .then(data => {
+                this.props.updateMarkerName(marker, data)
+            })
     }
 
     getMarkerColor(group) {
@@ -80,6 +89,11 @@ class MapLayer extends Component {
                                 .map((register, key) => (
                                     <Marker key={key} position={register.coordinates} icon={icons[value]}>
                                         <Popup>
+                                            Name: {register.name}
+                                            <br />
+                                            Load: {register.load}
+                                            <br />
+                                            <input type='button' value='Marker Overview' onClick={() => this.updateMarkerName(register.name)}></input>
                                         </Popup>
                                     </Marker>
                                 ))
@@ -113,4 +127,8 @@ const mapStateToProps = (state) => ({
     heatmap: state.heatmap
 })
 
-export default connect(mapStateToProps)(MapLayer)
+const mapDispatchToProps = dispatch => ({
+    updateMarkerName: (markerName, data) => dispatch(changeMarkerOverview(markerName, data))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapLayer)
