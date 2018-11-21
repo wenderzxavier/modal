@@ -29,7 +29,7 @@ class TimeVariation extends Component {
         }
     };
 
-    updateSlider(value){
+    updateSlider(value) {
         console.log(value)
         console.log(this.state.data)
         let key = Object.keys(this.state.data)[value]
@@ -42,7 +42,7 @@ class TimeVariation extends Component {
         var marks = {}
         var max = 0
         if (keys.length > 0) {
-            max = keys.length-1
+            max = keys.length - 1
             for (let i = 0; i < 5; i++) {
                 let pos = Math.round((i / 4) * (max))
                 marks[pos] = keys[pos]
@@ -120,7 +120,17 @@ class TimeVariation extends Component {
                     })
                     .catch(err => console.warn(err))
                 break
-
+            default:
+                staticMap(start, end)
+                    .then(data => {
+                        this.setState({
+                            data,
+                        }, () => {
+                            this.props.updateData(data)
+                        })
+                    })
+                    .catch(err => console.warn(err))
+                    break
         }
         this.props.updateVariation(interval, start, end)
     }
@@ -235,7 +245,7 @@ class TimeVariation extends Component {
                 <p id="end-date" className="interval-display">
                     Current End: {formatedEndDate}
                 </p>
-                <div>
+                <div className='intervals-time'>
                     <header>Intervals</header>
                     <div className="select-variation">
                         <label

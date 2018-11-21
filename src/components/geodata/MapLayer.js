@@ -13,7 +13,7 @@ import BusIcon from '../../img/geodata/BusIcon';
 import CarIcon from '../../img/geodata/CarIcon';
 import PersonIcon from '../../img/geodata/PersonIcon';
 import PinIcon from '../../img/geodata/PinIcon';
-import HeatMapLayer from 'react-leaflet-heatmap-layer'
+// import HeatMapLayer from 'react-leaflet-heatmap-layer'
 
 class MapLayer extends Component {
     getMarkerType(type, group) {
@@ -69,7 +69,7 @@ class MapLayer extends Component {
 
     render() {
         const { BaseLayer, Overlay } = LayersControl
-        const { data, heatmap } = this.props
+        const { data, /*heatmap*/ } = this.props
         let icons = this.updateIcon()
         return (
             <LayersControl position="topright">

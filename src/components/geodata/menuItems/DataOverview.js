@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 // import $ from 'jquery'
 import Plot from 'react-plotly.js'
-import { reduceByTimestamp } from '../func'
 import { connect } from 'react-redux'
 import '../../../styles/MenuItems.css'
 
@@ -21,6 +20,7 @@ class DataOverview extends Component {
                 1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
             x.push(formattedDate)
             y.push(point.load)
+            return ''
         })
         return [x,y]
     }
@@ -32,6 +32,7 @@ class DataOverview extends Component {
         data.map((point) => {
             x.push(point.name)
             y.push(point.load)
+            return ''
         })
         return [x,y]
     }
